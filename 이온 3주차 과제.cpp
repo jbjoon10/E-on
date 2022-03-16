@@ -9,7 +9,7 @@ int main(void)
 
 	for (i = 0; i < 6; i++)
 	{
-		count = int(printf("6°³ÀÇ ¼ö¸¦ ÀÔ·ÂÇÏ¼¼¿ä : "));
+		count = int(printf("6개의 수를 입력하세요 : "));
 		scanf("%d", &count);
 			result += count;
 	}
