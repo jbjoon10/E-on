@@ -9,7 +9,7 @@ int main(void)
 
 	for (i = 0; i < 6; i++)
 	{
-		count = int(printf("6°³ÀÇ ¼ö¸¦ ÀÔ·ÂÇÏ¼¼¿ä : "));
+		count = int(printf("6Â°Â³Ã€Ã‡ Â¼Ã¶Â¸Â¦ Ã€Ã”Â·Ã‚Ã‡ÃÂ¼Â¼Â¿Ã¤ : "));
 		scanf("%d", &count);
 			result += count;
 	}
