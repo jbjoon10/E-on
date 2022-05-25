@@ -23,6 +23,9 @@ public:
 		int i;
 		for (i = 0; i < 20; i++)name[i] = 0;
 		for (i = 0; i < 100; i++)title[i] = 0;
+		for (i = 0; i < 10; i++)year[i] = 0;
+		for (i = 0; i < 30; i++)publisher[i] = 0;
+		for (i = 0; i < 20; i++)genre[i] = 0;
 		page = 0;
 	}
 
@@ -66,6 +69,10 @@ public:
 			int i;
 			for (i = 0; i < 20; i++)name[i] = 0;
 			for (i = 0; i < 100; i++)title[i] = 0;
+			for (i = 0; i < 10; i++)year[i] = 0;
+			for (i = 0; i < 30; i++)publisher[i] = 0;
+			for (i = 0; i < 20; i++)genre[i] = 0;
+
 			page = 0;
 		}
 		else cout << "저장된 책이 없습니다." << endl;
@@ -97,6 +104,7 @@ public:
 	{
 		if (page != 0)
 		{
+
 			cout << "책 제목 : " << title << endl;
 			cout << "저자 : " << name << endl;
 			cout << "출판연도 : " << year << endl;
@@ -134,7 +142,133 @@ public:
 		return isRight;
 	}
 
+	void Save(FILE* file)
+	{
+		fputs(title, file);
+		fputs(" ", file);
+		fputs(name, file);
+		fputs(" ", file);
+		fputs(year, file);
+		fputs(" ", file);
+		fputs(publisher, file);
+		fputs(" ", file);
+		fputs(genre, file);
+		fputs("\n", file);
+	}
+
+	void SavePage(int a)
+	{
+		page = a;
+	}
+	void Saveontitle(const char* str)
+	{
+		strcpy(title, str);
+	}
+	void Saveonname(const char* str)
+	{
+		strcpy(name, str);
+	}
+	void Saveonyear(const char* str)
+	{
+		strcpy(year, str);
+	}
+	void Saveonpublisher(const char* str)
+	{
+		strcpy(publisher, str);
+	}
+	void Saveongenre(const char* str)
+	{
+		strcpy(genre, str);
+	}
+
 };
+
+
+void Savelibrary(book* bk)
+{
+	FILE* file = fopen("input.txt", "w");
+	for (int i = 0; i < 10; i++)
+	{
+		bk[i].Save(file);
+	}
+}
+
+void LoadOnList(book* arr, int* bookNum)
+{
+	ifstream inputfile("input.txt");
+	if (!inputfile)
+	{
+		cout << "파일 찾지 못함" << endl;
+		return;
+	}
+
+	int i = 0;
+	string line;
+	while (getline(inputfile, line))
+	{
+		string name, author, pubname, genre;
+		string pubyear;
+
+
+		int index = 0;
+		int leng = line.length();
+
+
+		//name 할당 
+		while (line[index] != ' ')
+		{
+			name.push_back(line[index]);
+			index++;
+		}
+		index++;
+
+		//author 할당 
+		while (line[index] != ' ')
+		{
+			author.push_back(line[index]);
+			index++;
+		}
+		index++;
+
+		//pubyear 할당 
+		while (line[index] != ' ')
+		{
+			pubyear.push_back(line[index]);
+			index++;
+		}
+		index++;
+
+		//pubname 할당 
+		while (line[index] != ' ')
+		{
+			pubname.push_back(line[index]);
+			index++;
+		}
+		index++;
+
+		//genre 할당 
+		while (index < (int)line.length())
+		{
+			genre.push_back(line[index]);
+			index++;
+		}
+
+		arr[i].Saveontitle(name.c_str());
+		arr[i].Saveonname(author.c_str());
+		arr[i].Saveonyear(pubyear.c_str());
+		arr[i].Saveonpublisher(pubname.c_str());
+		arr[i].Saveongenre(genre.c_str());
+
+		arr[i].SavePage(1);
+		i++;
+	}
+
+	
+
+	*bookNum = i+1;
+	inputfile.close();
+}
+
 
 int search_book(book* book_list, int num_total)
 { //먼저 어떤 기능으로 찾을지 확인 후 문자열 비교 함수를 이용해서 검색
@@ -176,6 +310,8 @@ void main()
 	int index = 0;
 	int book_num_total = 0;
 
+	LoadOnList(bk, &book_num_total);
+
 	while (1)
 	{
 		cout << "입력[0] 삭제[1] 수정[2] 출력[3] 검색[4] 종료[-1] : ";
@@ -212,7 +348,7 @@ void main()
 		else if (cmd == 3)
 		{
 			int i;
-			for (i = 0; i < index; i++)bk[i].print();
+			for (i = 0; i < book_num_total; i++)bk[i].print();
 		}
 
 		else if (cmd == 4)
